@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Para Meu Amor 💖</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .spotify-top {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      background-color: transparent;
+      padding-top: 10px;
+    }
+
+    iframe {
+      border-radius: 12px;
+      width: 90%;
+      max-width: 300px;
+      height: 80px;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-color: transparent;
+      width: 100vw;
+      height: 60vh;
+    }
+
+    .conteudo {
+      padding: 20px;
+    }
+
+    .contador {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+
+    .mensagem {
+      max-width: 600px;
+      margin: 30px auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      padding: 0 15px;
+    }
+
+    .cora {
+      color: #ff4d4d;
+      font-size: 1.6rem;
+      padding: 0 10px;
+    }
+
+    .botao-container {
+      margin-top: 20px;
+      margin-bottom: -10px;
+      text-align: center;
+    }
+
+    .botao {
+      background-color: #ff4d4d;
+      color: white;
+      font-size: 1.2rem;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .botao:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff4d4d88;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .mensagem {
+        font-size: 1rem;
+      }
+
+      .cora {
+        font-size: 1.3rem;
+      }
+
+      .botao {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+
+      canvas {
+        height: 50vh;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mensagem {
+        font-size: 0.95rem;
+      }
+
+      .cora {
+        font-size: 1.2rem;
+      }
+
+      .botao {
+        font-size: 0.95rem;
+        padding: 10px 18px;
+      }
+
+      canvas {
+        height: 45vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PLAYER NO TOPO -->
+  <div class="spotify-top">
+    <iframe src="https://open.spotify.com/embed/track/2NnSYdNhqye00il4nRB4tj?si=ca0a643213394af9&start=10"
+      frameborder="0" allowtransparency="true"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- CANVAS DO CORAÇÃO -->
+  <canvas id="heartCanvas"></canvas>
+
+  <!-- CONTEÚDO DA MENSAGEM -->
+  <div class="conteudo">
+    <h1 class="cora">❤️ Esse coração bate por você todos os dias. Eu te amo! 💖</h1>
+
+    <div class="mensagem">
+      Aqui é o nosso espaço de amor eterno, sempre pulsando e sempre vivo. Eu te amo mais a cada segundo!
+    </div>
+
+    <!-- Botão para voltar -->
+    <div class="botao-container">
+      <a href="página inicial.html" style="text-decoration: none;">
+        <button class="botao">
+          ❤️ Voltar
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <!-- SCRIPT DO CORAÇÃO -->
+  <script>
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.6;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function heartFunction(t) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+      return { x, y };
+    }
+
+    const particles = [];
+    const numParticles = 600;
+
+    for (let i = 0; i < numParticles; i++) {
+      const t = Math.random() * 2 * Math.PI;
+      const pos = heartFunction(t);
+      particles.push({
+        t,
+        baseX: pos.x,
+        baseY: pos.y,
+        size: Math.random() * 2 + 1,
+        speed: Math.random() * 0.005 + 0.002,
+        opacity: Math.random() * 0.6 + 0.4
+      });
+    }
+
+    let scale = 10;
+    let time = 0;
+
+    function animate() {
+  time += 0.02;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+
+  let baseScale;
+  if (window.innerWidth <= 480) {
+    baseScale = 6; // bem menor para celular
+  } else if (window.innerWidth <= 768) {
+    baseScale = 5.5; // reduzido para tablet
+  } else {
+    baseScale = 8; // desktop
+  }
+
+  let scale = baseScale + Math.sin(time * 2) * 0.4;  // Ajustei a variação da escala
+
+  // Função do coração ajustada para melhorar a proporção
+  function heartFunction(t) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+    return { x, y };
+  }
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    p.t += p.speed;
+
+    const pos = heartFunction(p.t);
+    p.baseX = pos.x;
+    p.baseY = pos.y;
+
+    const x = centerX + p.baseX * scale;
+    const y = centerY - p.baseY * scale;
+
+    ctx.beginPath();
+    ctx.arc(x, y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 80, 120, ${p.opacity})`;
+    ctx.fill();
+  }
+
+  requestAnimationFrame(animate);
+}
+
+    animate();
+  </script>
+</body>
+</html>

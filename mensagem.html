@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Para Meu Amor 💖</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    canvas#coracoes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .spotify-top {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      background-color: transparent;
+      padding-top: 10px;
+    }
+
+    iframe {
+      border-radius: 12px;
+      max-width: 90%;
+    }
+
+    .conteudo {
+      padding: 20px;
+    }
+
+    img {
+      width: 250px;
+      max-width: 90%;
+      border-radius: 20px;
+      margin: 20px 0;
+    }
+
+    .contador {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+
+    .mensagem {
+      max-width: 600px;
+      margin: 30px auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      padding: 0 10px;
+    }
+
+    .cora {
+      color: #ff4d4d;
+    }
+
+    .botao-container {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .botao {
+      background-color: #ff4d4d;
+      color: white;
+      font-size: 1.2rem;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .botao:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff4d4d88;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .mensagem {
+        font-size: 1rem;
+        padding: 0 15px;
+      }
+
+      .botao {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+
+      .contador {
+        font-size: 1rem;
+      }
+
+      iframe {
+        width: 90%;
+        height: 80px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mensagem {
+        font-size: 0.95rem;
+      }
+
+      .botao {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+      }
+
+      img {
+        width: 90%;
+      }
+
+      .contador {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas com corações suaves -->
+  <canvas id="coracoes"></canvas>
+
+  <!-- PLAYER NO TOPO -->
+  <div class="spotify-top">
+    <iframe src="https://open.spotify.com/embed/track/2TE9rkhJYDctxgzak0AnSb?utm_source=generator"
+      width="300" height="80" frameborder="0" allowtransparency="true"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="conteudo">
+    <h1 class="cora">❤️ Eu te amo há:</h1>
+    <div class="contador" id="contador"></div>
+
+    <img src="nossa-foto.jpg" alt="Foto do casal"/>
+
+    <div class="mensagem">
+      Você é a mulher que mexeu com tudo em mim sem nem precisar tentar. Tem algo em você que me prende, me acalma e ao mesmo tempo me enlouquece. Sua força, sua fé, seus sonhos… tudo em você é diferente, é raro, é verdadeiro. Eu não quero só passar um tempo ao seu lado — eu quero a vida inteira. Quero te amar, te proteger e te fazer sentir todos os dias o quanto você é única. Você não tem noção do quanto é especial. E eu sei, no fundo da alma, que é você. ❤️
+    </div>
+
+    <div class="botao-container">
+      <a href="coração pulsando.html" style="text-decoration: none;">
+        <button class="botao" onclick="continuarMusica()">
+          ❤️ Clique no coração
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // CONTADOR
+    const inicioRelacionamento = new Date("2025-04-05T12:00:00");
+    function atualizarContador() {
+      const agora = new Date();
+      const diferenca = agora - inicioRelacionamento;
+      const segundosTotais = Math.floor(diferenca / 1000);
+
+      const anos = Math.floor(segundosTotais / (60 * 60 * 24 * 365));
+      const dias = Math.floor((segundosTotais % (60 * 60 * 24 * 365)) / (60 * 60 * 24));
+      const horas = Math.floor((segundosTotais % (60 * 60 * 24)) / (60 * 60));
+      const minutos = Math.floor((segundosTotais % (60 * 60)) / 60);
+      const segundos = segundosTotais % 60;
+
+      document.getElementById("contador").innerText =
+        `${anos} anos, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    function continuarMusica() {
+      localStorage.setItem('musicaTocando', true);
+    }
+
+    // ANIMAÇÃO COM CORAÇÕES SUBINDO E DESAPARECENDO SUAVEMENTE
+    const canvas = document.getElementById("coracoes");
+    const ctx = canvas.getContext("2d");
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    function desenharCoracao(x, y, tamanho, cor, opacidade) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(tamanho, tamanho);
+      ctx.beginPath();
+      ctx.globalAlpha = opacidade;
+      ctx.fillStyle = cor;
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -3, -5, -3, -5, 0);
+      ctx.bezierCurveTo(-5, 3, 0, 5, 0, 7);
+      ctx.bezierCurveTo(0, 5, 5, 3, 5, 0);
+      ctx.bezierCurveTo(5, -3, 0, -3, 0, 0);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const coracoes = [];
+    const cores = ["#ff4d4d", "#ff7373", "#ff9999"];
+
+    for (let i = 0; i < 60; i++) {
+      coracoes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        tamanho: Math.random() * 0.4 + 0.2,
+        speedY: Math.random() * 0.3 + 0.2,
+        speedX: (Math.random() - 0.5) * 0.3,
+        cor: cores[Math.floor(Math.random() * cores.length)],
+        opacidade: Math.random() * 0.6 + 0.3
+      });
+    }
+
+    function animar() {
+  ctx.clearRect(0, 0, width, height);
+
+  const spotifyTop = document.querySelector(".spotify-top");
+  const spotifyHeight = spotifyTop.offsetHeight;
+
+  let tamanhoBase = 10; // padrão para desktop
+
+  if (width <= 480) {
+    tamanhoBase = 6; // celular
+  } else if (width <= 768) {
+    tamanhoBase = 8; // tablet
+  }
+
+  for (let c of coracoes) {
+    let fade = 1;
+    if (c.y > spotifyHeight - 100) {
+      fade = Math.max(0, (height - c.y) / height);
+    }
+
+    desenharCoracao(c.x, c.y, c.tamanho * tamanhoBase, c.cor, c.opacidade * fade);
+
+    c.y -= c.speedY;
+    c.x += c.speedX;
+
+    if (c.y < -20) {
+      c.y = height + Math.random() * 100;
+      c.x = Math.random() * width;
+      c.tamanho = Math.random() * 0.4 + 0.2;
+      c.speedY = Math.random() * 0.3 + 0.2;
+      c.speedX = (Math.random() - 0.5) * 0.3;
+      c.cor = cores[Math.floor(Math.random() * cores.length)];
+      c.opacidade = Math.random() * 0.6 + 0.3;
+    }
+  }
+
+  requestAnimationFrame(animar);
+}
+
+    animar();
+  </script>
+
+</body>
+</html>
